@@ -97,36 +97,53 @@ document.addEventListener("keydown", (event) => {
 function addLetter(letter) {
   logDebug(`🎯 addLetter("${letter}") called`, "info");
 
-  // TODO: Check if current row is full (currentTile >= 5)
-  // TODO: If full, log error message and return early
   if (currentTile >= 5) {
     logDebug("Trying to add letter when the current row is full.", "error");
   }
-  // TODO: Get the current row element using rows[currentRow]
   const rowElement = rows[currentRow];
-  // TODO: Get all tiles in that row using querySelectorAll('.tile')
   const tiles = rowElement.querySelectorAll(".tile");
-  // TODO: Get the specific tile using tiles[currentTile]
   const tileElement = tiles[currentTile];
-  // TODO: Set the tile's textContent to the letter
+
   tileElement.textContent = letter;
-  // TODO: Add the 'filled' CSS class to the tile
   tileElement.classList.add("filled");
 
-  // TODO: Log success message with position info
   logDebug(
-    `Tile at  (${rowElement}, ${tileElement}) has been updated to have the letter ${letter}.`,
+    `Tile at  (${currentRow}, ${currentTile}) has been updated to have the letter ${letter}.`,
     "success"
   );
-  // TODO: Increment currentTile by 1
+
   currentTile++;
-  // TODO: Log current word progress using getCurrentWord()
+
   logDebug(`Current word progress: ${getCurrentWord()}`, "info");
 }
 
 // TODO: Implement deleteLetter function
 function deleteLetter() {
-  // Your code here!
+  logDebug(`🗑️ deleteLetter() called`, "info");
+
+  if (currentTile <= 0) {
+    logDebug(
+      "deleteLetter() called when there are no letters to delete.",
+      "error"
+    );
+    return;
+  }
+
+  currentTile--;
+
+  const rowElement = rows[currentRow];
+  const tiles = rowElement.querySelectorAll(".tile");
+  const tileElement = tiles[currentTile];
+  const letterDeleted = tileElement.textContent;
+
+  tileElement.textContent = "";
+  tileElement.classList.remove("filled");
+
+  logDebug(
+    `Letter ${letterDeleted} deleted from position (${currentRow}, ${currentTile})`,
+    "success"
+  );
+  logDebug(`Current word status: ${getCurrentWord()}`, "info");
 }
 
 // TODO: Implement submitGuess function
