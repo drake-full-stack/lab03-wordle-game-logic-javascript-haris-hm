@@ -69,18 +69,13 @@ document.addEventListener("DOMContentLoaded", function () {
 // ===== YOUR CHALLENGE: IMPLEMENT THESE FUNCTIONS =====
 
 document.addEventListener("keydown", (event) => {
-  // TODO: Add your code here
-  // Hint: Check if game is over first
   if (gameOver) {
     return;
   }
 
-  // Hint: Convert event.key to uppercase
   let keyPressed = event.key.toUpperCase();
   logDebug(`Key "${keyPressed}" pressed.`, "info");
 
-  // Hint: Handle three cases: BACKSPACE, ENTER, and letters A-Z
-  // Hint: Call the appropriate function for each case
   if (keyPressed === "BACKSPACE") {
     deleteLetter();
   } else if (keyPressed === "ENTER") {
@@ -107,17 +102,15 @@ function addLetter(letter) {
   tileElement.textContent = letter;
   tileElement.classList.add("filled");
 
+  currentTile++;
+
   logDebug(
     `Tile at  (${currentRow}, ${currentTile}) has been updated to have the letter ${letter}.`,
     "success"
   );
-
-  currentTile++;
-
   logDebug(`Current word progress: ${getCurrentWord()}`, "info");
 }
 
-// TODO: Implement deleteLetter function
 function deleteLetter() {
   logDebug(`🗑️ deleteLetter() called`, "info");
 
@@ -143,17 +136,46 @@ function deleteLetter() {
     `Letter ${letterDeleted} deleted from position (${currentRow}, ${currentTile})`,
     "success"
   );
-  logDebug(`Current word status: ${getCurrentWord()}`, "info");
+  logDebug(`Current word progress: ${getCurrentWord()}`, "info");
 }
 
-// TODO: Implement submitGuess function
 function submitGuess() {
-  // Your code here!
+  logDebug(`📝 submitGuess() called`, "info");
+
+  if (currentTile !== 5) {
+    logDebug("submitGuess() called too early!", "error");
+    return;
+  }
+
+  const rowElement = rows[currentRow];
+  const tiles = rowElement.querySelectorAll(".tile");
+
+  let guess = "";
+  tiles.forEach((tile) => {
+    guess += tile.textContent;
+  });
+
+  logDebug(`Current guess: ${guess} | Target word: ${TARGET_WORD}`, "info");
+
+  checkGuess(guess, tiles);
+  currentRow++;
+  currentTile = 0;
+
+  if (guess === TARGET_WORD) {
+    gameOver = true;
+    setTimeout(() => alert("Congratulations! You won!"), 500);
+    logDebug(`Current game status: won`, "info");
+  } else if (currentRow >= 6) {
+    gameOver = true;
+    setTimeout(() => alert("Game over! You lost."), 500);
+    logDebug(`Current game status: lost`, "info");
+  }
+  logDebug(`Current game status: continuing`, "info");
 }
 
 // TODO: Implement checkGuess function (the hardest part!)
-// function checkGuess(guess, tiles) {
-//     // Your code here!
-//     // Remember: handle duplicate letters correctly
-//     // Return the result array
-// }
+function checkGuess(guess, tiles) {
+  // Your code here!
+  // Remember: handle duplicate letters correctly
+  // Return the result array
+}
