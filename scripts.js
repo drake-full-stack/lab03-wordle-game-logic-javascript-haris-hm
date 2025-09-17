@@ -218,6 +218,5 @@ function checkGuess(guess, tiles) {
 
   logDebug(`Final result: ${result}`, "info");
 
-  // TODO: Apply CSS classes to tiles -- we'll do this in the next step
   return result;
 }
