@@ -173,9 +173,51 @@ function submitGuess() {
   logDebug(`Current game status: continuing`, "info");
 }
 
-// TODO: Implement checkGuess function (the hardest part!)
 function checkGuess(guess, tiles) {
-  // Your code here!
-  // Remember: handle duplicate letters correctly
-  // Return the result array
+  logDebug(`🔍 Starting analysis for "${guess}"`, "info");
+
+  const target = TARGET_WORD.split("");
+  const guessArray = guess.split("");
+  const result = ["absent", "absent", "absent", "absent", "absent"];
+
+  // STEP 1: Find exact matches
+  for (let i = 0; i < 5; i++) {
+    if (target[i] === guess[i]) {
+      logDebug(
+        `Position ${i}: ${target[i]} = ${guess[i]} (correct)`,
+        "success"
+      );
+      result[i] = "correct";
+      target[i] = null;
+      guessArray[i] = null;
+
+      const tileElement = tiles[i];
+      tileElement.classList.add("correct");
+    }
+  }
+
+  logDebug(`Result so far: ${result}`, "info");
+
+  // STEP 2: Find wrong position matches
+  for (let i = 0; i < 5; i++) {
+    if (guessArray[i] !== null) {
+      const guessLetter = guessArray[i];
+      if (target.includes(guessLetter)) {
+        logDebug(
+          `Position ${i}: ${guessLetter} exists in target (present)`,
+          "warn"
+        );
+        result[i] = "present";
+        target[i] = null;
+
+        const tileElement = tiles[i];
+        tileElement.classList.add("present");
+      }
+    }
+  }
+
+  logDebug(`Final result: ${result}`, "info");
+
+  // TODO: Apply CSS classes to tiles -- we'll do this in the next step
+  return result;
 }
